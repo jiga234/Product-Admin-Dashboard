@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
@@ -12,6 +12,7 @@ export function Navbar() {
   const { user, logout } = useAuth();
   const { hasLocalChanges, resetLocalOverrides } = useProductOverlay();
   const { success } = useToast();
+  const [avatarError, setAvatarError] = useState(false);
 
   const handleResetOverrides = () => {
     resetLocalOverrides();
@@ -65,13 +66,15 @@ export function Navbar() {
                 {/* User avatar & name */}
                 <div className="flex items-center gap-2.5">
                   <div className="relative w-9 h-9 rounded-full overflow-hidden bg-slate-800 ring-2 ring-indigo-500/30 shrink-0">
-                    {user.image ? (
+                    {user.image && !avatarError ? (
                       <Image
                         src={user.image}
                         alt={user.firstName || user.username}
                         fill
+                        unoptimized
                         className="object-cover"
                         sizes="36px"
+                        onError={() => setAvatarError(true)}
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-indigo-900 text-indigo-200">
