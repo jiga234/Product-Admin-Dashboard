@@ -24,7 +24,6 @@ interface UseProductsQueryResult {
   error: string | null;
   refetch: () => void;
   isHybridSearch: boolean;
-  activeRequestId: number;
 }
 
 export function useProductsQuery(options: UseProductsQueryOptions): UseProductsQueryResult {
@@ -184,6 +183,5 @@ export function useProductsQuery(options: UseProductsQueryOptions): UseProductsQ
     error,
     refetch: fetchProducts,
     isHybridSearch,
-    activeRequestId: latestRequestIdRef.current,
   };
 }

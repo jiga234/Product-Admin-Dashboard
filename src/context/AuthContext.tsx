@@ -8,7 +8,7 @@ import React, {
   useCallback,
   ReactNode,
 } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { authService, LoginCredentials } from "@/services/authService";
 import { User, LoginResponse } from "@/types";
 import { useToast } from "./ToastContext";
@@ -29,7 +29,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const router = useRouter();
-  const pathname = usePathname();
   const { info, error: toastError, success: toastSuccess } = useToast();
 
   const logout = useCallback(() => {

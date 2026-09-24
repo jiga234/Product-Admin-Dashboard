@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 import { useProductOverlay } from "@/context/ProductOverlayContext";
 import { useToast } from "@/context/ToastContext";
-import { LogOut, Package, RefreshCw, Sparkles, User as UserIcon } from "lucide-react";
+import { LogOut, Package, RefreshCw, User as UserIcon } from "lucide-react";
 
 export function Navbar() {
   const { user, logout } = useAuth();

@@ -149,7 +149,7 @@ export function ProductFormModal({
 
       if (isEditing && productToEdit) {
         // Call DummyJSON API update endpoint via Axios
-        const updatedApiProduct = await productService.updateProduct(
+        await productService.updateProduct(
           productToEdit.id,
           payload
         );

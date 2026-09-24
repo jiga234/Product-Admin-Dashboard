@@ -8,9 +8,7 @@ import {
   ArrowUpDown,
   Plus,
   RotateCcw,
-  Sparkles,
   Info,
-  Clock,
 } from "lucide-react";
 import { productService } from "@/services/productService";
 import { ProductCategory, SortField, SortOrder } from "@/types";
@@ -36,14 +34,13 @@ export function ProductFilters({
   resetFilters,
   onOpenAddModal,
   isHybridSearch = false,
-  isLoading = false,
+  isLoading: _isLoading = false,
 }: ProductFiltersProps) {
   // Local search query for smooth typing without lag
   const [searchInput, setSearchInput] = useState(params.q);
   const debouncedSearch = useDebounce(searchInput, 400);
 
   const [categories, setCategories] = useState<ProductCategory[]>([]);
-  const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
 
   // Sync local search input if URL changes externally (e.g. Back button or URL change)
   useEffect(() => {
@@ -66,12 +63,10 @@ export function ProductFilters({
         if (isMounted) {
           // DummyJSON returns array of objects with slug & name
           setCategories(data);
-          setLoadingCategories(false);
         }
       })
       .catch((err) => {
         console.error("Failed to load categories:", err);
-        if (isMounted) setLoadingCategories(false);
       });
 
     return () => {

@@ -24,9 +24,6 @@ import {
   Trash2,
   AlertTriangle,
   Loader2,
-  ExternalLink,
-  Tag,
-  Box,
 } from "lucide-react";
 
 interface ProductDetailsPageProps {
@@ -85,13 +82,13 @@ function ProductDetailsContent({ idParam }: { idParam: string }) {
             : finalProduct.thumbnail
         );
       }
-    } catch (err: unknown) {
+    } catch {
       // If 404 or any other error from API, show Not Found page
       setNotFound(true);
     } finally {
       setLoading(false);
     }
-  }, [idParam, parsedId, isInvalidIdFormat, applyOverlayToSingleProduct]);
+  }, [parsedId, isInvalidIdFormat, applyOverlayToSingleProduct]);
 
   useEffect(() => {
     loadProduct();
