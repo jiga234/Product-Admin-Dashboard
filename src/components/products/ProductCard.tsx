@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Product } from "@/types";
 import { Star, Eye, Edit2, Trash2, Package } from "lucide-react";
+import { useCurrency } from "@/context/CurrencyContext";
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +14,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
+  const { formatPrice } = useCurrency();
   const [imgFailed, setImgFailed] = useState(false);
 
   const imageSrc =
@@ -105,7 +107,7 @@ export function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
         <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
           <div className="flex flex-col">
             <span className="text-lg font-bold text-white">
-              ${Number(product.price).toFixed(2)}
+              {formatPrice(product.price)}
             </span>
             {product.discountPercentage ? (
               <span className="text-[11px] text-emerald-400 font-medium -mt-0.5">

@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from "react";
 import { X, Loader2, Sparkles, AlertCircle } from "lucide-react";
 import { Product, ProductFormData, FormValidationErrors, ProductCategory } from "@/types";
-import { productService } from "@/services/productService";
+import { productService, FALLBACK_CATEGORIES } from "@/services/productService";
 import { useProductOverlay } from "@/context/ProductOverlayContext";
 import { useToast } from "@/context/ToastContext";
+import { useCurrency } from "@/context/CurrencyContext";
 
 interface ProductFormModalProps {
   isOpen: boolean;
@@ -23,8 +24,9 @@ export function ProductFormModal({
   const isEditing = Boolean(productToEdit);
   const { recordAddedProduct, recordUpdatedProduct } = useProductOverlay();
   const { success, error: toastError } = useToast();
+  const { currency, currencySymbol, convertFromBase, convertToBase } = useCurrency();
 
-  const [categories, setCategories] = useState<ProductCategory[]>([]);
+  const [categories, setCategories] = useState<ProductCategory[]>(FALLBACK_CATEGORIES);
   const [formData, setFormData] = useState<ProductFormData>({
     title: "",
     description: "",
@@ -55,7 +57,7 @@ export function ProductFormModal({
           title: productToEdit.title || "",
           description: productToEdit.description || "",
           category: productToEdit.category || "",
-          price: String(productToEdit.price ?? ""),
+          price: productToEdit.price !== undefined ? String(convertFromBase(productToEdit.price)) : "",
           stock: String(productToEdit.stock ?? ""),
           rating: String(productToEdit.rating ?? "4.5"),
           brand: productToEdit.brand || "",
@@ -76,7 +78,7 @@ export function ProductFormModal({
       setErrors({});
       setIsSubmitting(false);
     }
-  }, [isOpen, productToEdit]);
+  }, [isOpen, productToEdit, convertFromBase]);
 
   if (!isOpen) return null;
 
@@ -95,7 +97,7 @@ export function ProductFormModal({
 
     const priceNum = parseFloat(formData.price);
     if (!formData.price.trim() || isNaN(priceNum) || priceNum <= 0) {
-      newErrors.price = "Enter a valid positive price (e.g. 19.99).";
+      newErrors.price = `Enter a valid positive price (e.g. ${currency === "INR" ? "499" : "19.99"}).`;
     }
 
     const stockNum = parseInt(formData.stock, 10);
@@ -134,11 +136,14 @@ export function ProductFormModal({
     setIsSubmitting(true);
 
     try {
+      const rawPrice = parseFloat(formData.price);
+      const basePrice = convertToBase(rawPrice);
+
       const payload: Partial<Product> = {
         title: formData.title.trim(),
         description: formData.description.trim(),
         category: formData.category,
-        price: parseFloat(formData.price),
+        price: basePrice,
         stock: parseInt(formData.stock, 10),
         rating: formData.rating ? parseFloat(formData.rating) : 4.5,
         brand: formData.brand.trim() || "Brandless",
@@ -302,7 +307,7 @@ export function ProductFormModal({
           <div className="grid grid-cols-3 gap-3">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-                Price ($) *
+                Price ({currencySymbol}) *
               </label>
               <input
                 type="number"
@@ -310,7 +315,7 @@ export function ProductFormModal({
                 name="price"
                 value={formData.price}
                 onChange={handleChange}
-                placeholder="29.99"
+                placeholder={currency === "INR" ? "499" : "29.99"}
                 className={`w-full px-3 py-2 bg-slate-950/80 border rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 transition-all ${
                   errors.price
                     ? "border-rose-500 focus:ring-rose-500/40"

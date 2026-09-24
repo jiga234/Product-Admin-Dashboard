@@ -44,6 +44,7 @@ Designed and engineered for speed, clean architecture, and visual excellence wit
 | **URL Resilience** | Malformed values like `?page=abc` | ✅ Completed | Safe parsing with sensible fallbacks (e.g. invalid page falls back to 1; out-of-range pages clamped without crashing). |
 | **Double-submit Protection** | Rapid clicking Save or Login | ✅ Completed | `isSubmitting` / `isDeleting` flags disable action buttons and display loading spinners during active requests. |
 | **Feedback & Notifications** | Loaders, empty states, error retry, toasts | ✅ Completed | Skeleton loaders for table & cards, empty state with filter reset, error banner with Retry button, and auto-dismissing toast notifications. |
+| **Indian Rupees & Multi-Currency** | Convert $ to Indian Rupees (₹) with live conversion & toggle | ✅ Completed | Default currency set to INR (₹) with `en-IN` formatting (1 USD ≈ ₹83), plus interactive navbar currency switcher with live switching and 1:1 option. |
 
 ---
 

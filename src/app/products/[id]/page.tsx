@@ -11,6 +11,7 @@ import { useProductOverlay } from "@/context/ProductOverlayContext";
 import { Product } from "@/types";
 import { ProductFormModal } from "@/components/products/ProductFormModal";
 import { DeleteConfirmModal } from "@/components/products/DeleteConfirmModal";
+import { useCurrency } from "@/context/CurrencyContext";
 import {
   ArrowLeft,
   Star,
@@ -33,6 +34,7 @@ interface ProductDetailsPageProps {
 function ProductDetailsContent({ idParam }: { idParam: string }) {
   const router = useRouter();
   const { applyOverlayToSingleProduct } = useProductOverlay();
+  const { formatPrice } = useCurrency();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -293,15 +295,14 @@ function ProductDetailsContent({ idParam }: { idParam: string }) {
             <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-2">
               <div className="flex items-baseline gap-3">
                 <span className="text-3xl font-extrabold text-white">
-                  ${Number(product.price).toFixed(2)}
+                  {formatPrice(product.price)}
                 </span>
                 {product.discountPercentage ? (
                   <span className="text-sm text-slate-500 line-through">
-                    $
-                    {(
+                    {formatPrice(
                       product.price /
                       (1 - product.discountPercentage / 100)
-                    ).toFixed(2)}
+                    )}
                   </span>
                 ) : null}
               </div>

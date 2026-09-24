@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Product } from "@/types";
 import { Star, Eye, Edit2, Trash2, Package } from "lucide-react";
+import { useCurrency } from "@/context/CurrencyContext";
 
 interface ProductTableProps {
   products: Product[];
@@ -13,6 +14,7 @@ interface ProductTableProps {
 }
 
 export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) {
+  const { formatPrice, currencySymbol } = useCurrency();
   const [failedImages, setFailedImages] = useState<Record<number, boolean>>({});
 
   const handleImageError = (id: number) => {
@@ -55,7 +57,7 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
                 Category
               </th>
               <th scope="col" className="px-6 py-4 font-semibold">
-                Price
+                Price ({currencySymbol})
               </th>
               <th scope="col" className="px-6 py-4 font-semibold">
                 Rating
@@ -131,7 +133,7 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
                   <td className="px-6 py-4">
                     <div className="flex flex-col">
                       <span className="font-semibold text-slate-100 text-sm">
-                        ${Number(product.price).toFixed(2)}
+                        {formatPrice(product.price)}
                       </span>
                       {product.discountPercentage ? (
                         <span className="text-[11px] text-emerald-400 font-medium">

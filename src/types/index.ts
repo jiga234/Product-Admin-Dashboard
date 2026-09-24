@@ -117,3 +117,6 @@ export interface FormValidationErrors {
   brand?: string;
   thumbnail?: string;
 }
+
+export type CurrencyCode = "INR" | "USD";
+

@@ -10,7 +10,7 @@ import {
   RotateCcw,
   Info,
 } from "lucide-react";
-import { productService } from "@/services/productService";
+import { productService, FALLBACK_CATEGORIES } from "@/services/productService";
 import { ProductCategory, SortField, SortOrder } from "@/types";
 import { useDebounce } from "@/hooks/useDebounce";
 import { ParsedProductParams } from "@/hooks/useProductUrlParams";
@@ -40,7 +40,8 @@ export function ProductFilters({
   const [searchInput, setSearchInput] = useState(params.q);
   const debouncedSearch = useDebounce(searchInput, 400);
 
-  const [categories, setCategories] = useState<ProductCategory[]>([]);
+  // Initialize with fallback categories so dropdown is populated instantly
+  const [categories, setCategories] = useState<ProductCategory[]>(FALLBACK_CATEGORIES);
 
   // Sync local search input if URL changes externally (e.g. Back button or URL change)
   useEffect(() => {
